@@ -1,21 +1,47 @@
-# moja_lista_na_sok:list = ['banan']
-# print(moja_lista_na_sok)
-# moja_lista_na_sok.append('marchew')
-# print(moja_lista_na_sok)
-
-users: list = [
-    {'name': 'Maciej', 'location': 'Łódź', 'posts': 100},
-
-]
-
-print(users)
-def add_user(users_data:list)->None:
-    new_name:str=input('podaj imię nowego znajomego: ')
-    new_location:str=input('podaj lokalizację: ')
-    new_posts:str=input('podaj liczbę postów: ')
-    users.append({'name': new_name, 'location': new_location, 'posts': new_posts},)
+from geocoder import location
 
 
+class User:
+    def __init__(self,name,surname,location,post):
+        self.name=name
+        self.surname=surname
+        self.location=location
+        self.post=post
+        self.get_coordinates=self.get_coordinates()
 
-add_user(users)
-print(users)
+    def get_coordinates(self) -> list:
+        import requests
+        from bs4 import BeautifulSoup
+        url = f"https://pl.wikipedia.org/wiki/{self.location}"
+        response = requests.get(url).text
+        response_html = BeautifulSoup(response, "html.parser")
+        longitude = float(response_html.select(".longitude")[1].text.replace(",", "."))
+        latitude = float(response_html.select(".latitude")[1].text.replace(",", "."))
+        print(longitude)
+        print(latitude)
+        return [latitude, longitude]
+
+
+
+
+
+
+
+
+user_01=User(name="Jhon",surname="Konrad",location="Kraków",post="Konrad")
+user_02=User(name="JON",surname="KON",location="Warszawa",post="Konrad")
+
+
+print(user_01.name,user_01.surname,user_01.location,user_01.post)
+print(user_02.name,user_02.surname,user_02.location,user_02.post)
+
+
+
+
+
+
+
+
+
+
+
